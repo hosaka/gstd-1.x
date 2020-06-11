@@ -52,7 +52,7 @@ jobs:
         sudo pip3 install meson
 
     - name: Generate
-      run: meson --prefix /usr --werror build
+      run: meson --libdir /usr/local/lib --werror build
     - name: Compile
       run: ninja -C build
     - name: Checks
@@ -61,5 +61,5 @@ jobs:
       run: sudo ninja -C build install
     - name: List Pipelines Verification
       run: |
-        gstd
+        LD_LIBRARY_PATH=/usr/local/lib/ gstd
         gstd-client list_pipelines
