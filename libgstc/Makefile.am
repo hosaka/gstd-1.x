@@ -1,4 +1,7 @@
 SUBDIRS=c	\
-    javascript  \
-    python
+    javascript
+
+if ENABLE_PYGSTC
+SUBDIRS+=python
+endif
 

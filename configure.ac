@@ -22,6 +22,9 @@ LIBD_REQUIRED=0.14
 dnl required version of jansson
 JANSSON_REQUIRED=2.7
 
+dnl required version of python
+PYTHON_REQUIRED=3.5
+
 AC_CONFIG_SRCDIR([gstd/gstd.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
@@ -183,6 +186,19 @@ PKG_CHECK_MODULES(JANSSON, [
     development headers installed.
   ])
 ])
+
+dnl allow the user to include/exclude pygstc build
+AC_ARG_ENABLE([pygstc],
+  [AS_HELP_STRING([--enable-pygstc],
+    [build python bindings @<:@default=check@:>@])],
+    [:],
+    [enable_pygstc=check])
+AS_IF([test "x$enable_pygstc" != "xno"], [
+    AM_PATH_PYTHON([$PYTHON_REQUIRED])
+    AX_PYTHON_MODULE(pip, [AC_MSG_ERROR([pygstc requires pip python module, but it was not found])])
+    AX_PYTHON_MODULE(setuptools, [AC_MSG_ERROR([pygstc requires setuptools python module, but it was not found])])
+  ])
+AM_CONDITIONAL([ENABLE_PYGSTC], [test "x$enable_pygstc" != "xno"])
 
 dnl allow the user to specify the location of the PID files
 default=${localstatedir}/run/gstd/
